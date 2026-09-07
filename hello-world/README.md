@@ -1,5 +1,7 @@
 # Hello World PlayStation 3
 
+[![Construction de l'ISO](https://github.com/hexegesis/hexegesis-experiments/actions/workflows/release-hello-world.yml/badge.svg?branch=main)](https://github.com/hexegesis/hexegesis-experiments/actions/workflows/release-hello-world.yml?query=branch%3Amain)
+
 Cette expérimentation construit, à partir de sources redistribuables, un programme PlayStation 3 minimal et une image disque synthétique. Elle sert d'exemple reproductible pour les articles consacrés à Hexegesis ; elle ne démontre aucune compatibilité avec une console physique ou une image commerciale.
 
 ## Prérequis
@@ -21,7 +23,7 @@ Les fichiers produits sont ignorés par Git et peuvent être recréés à tout m
 
 ## Publication avec GitHub Actions
 
-Un tag dont le nom suit la forme `hello-world-v*` construit cette même ISO avec GitHub Actions et la joint à la GitHub Release correspondante. Le workflow appelle uniquement `./scripts/build.sh` : la procédure locale, la procédure de CI et les contrôles de structure décrits plus haut restent donc identiques.
+Le badge ci-dessus indique la dernière construction du workflow sur `main`. Un tag dont le nom suit la forme `hello-world-v*` construit cette même ISO avec GitHub Actions et la joint à la GitHub Release correspondante. Le workflow appelle uniquement `./scripts/build.sh` : la procédure locale, la procédure de CI et les contrôles de structure décrits plus haut restent donc identiques.
 
 ```sh
 git tag hello-world-v0.1.0

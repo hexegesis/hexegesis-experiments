@@ -1,9 +1,11 @@
 name: Publier l'ISO Hello World
 
-# Seuls les tags de cet exemple créent une release : les futures expériences du
-# dépôt ne déclenchent donc pas cette construction par erreur.
+# main construit l'image afin que le badge du README mesure la procédure de
+# référence. Seuls les tags de cet exemple déclenchent sa publication.
 on:
   push:
+    branches:
+      - main
     tags:
       - "hello-world-v*"
 
@@ -13,7 +15,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +28,11 @@ jobs:
         working-directory: hello-world
         run: ./scripts/build.sh
 
-      # L'ISO est publiée directement dans la GitHub Release plutôt que comme
-      # artefact temporaire de CI. Le tag identifie donc le commit qui l'a
-      # construite et la release qui la distribue.
+      # Cette étape ne s'exécute que pour un tag : les constructions de main
+      # alimentent le badge sans créer de release. L'ISO est publiée directement
+      # dans la GitHub Release plutôt que comme artefact temporaire de CI.
       - name: Créer la release
+        if: startsWith(github.ref, 'refs/tags/hello-world-v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
