@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<sfo>
+  <!-- Version de l'application. La forme attendue est NN.NN. -->
+  <value name="APP_VER" type="string">01.00</value>
+
+  <!-- Drapeaux d'attributs optionnels. La valeur 0 n'en active aucun. -->
+  <value name="ATTRIBUTE" type="integer">0</value>
+
+  <!-- Indique si le contenu est amorçable : 1 pour oui, 0 pour non. -->
+  <value name="BOOTABLE" type="integer">1</value>
+
+  <!-- Nature du contenu. DG désigne un jeu sur disque. -->
+  <!-- RPCS3 attend précisément DG lorsqu'il reconnaît ce répertoire comme jeu disque. -->
+  <value name="CATEGORY" type="string">DG</value>
+
+  <!-- Niveau de contrôle parental, sur une échelle communautairement documentée de 0 à 11. -->
+  <!-- Nous conservons la valeur 0 du modèle fourni par PSL1GHT. -->
+  <value name="PARENTAL_LEVEL" type="integer">0</value>
+
+  <!-- Version minimale du logiciel système annoncée par le jeu, sous la forme NN.NNNN. -->
+  <value name="PS3_SYSTEM_VER" type="string">01.8000</value>
+
+  <!-- Drapeaux des modes vidéo annoncés. -->
+  <!-- 63 = 1 + 2 + 4 + 8 + 16 + 32 : tous les drapeaux définis par RPCS3 sont activés. -->
+  <!-- Ils correspondent à 480, 576, 720, 1080, 480 au format 16:9 et 576 au format 16:9. -->
+  <value name="RESOLUTION" type="integer">63</value>
+
+  <!-- Masque des formats audio annoncés au système. -->
+  <!-- La valeur 1 correspond uniquement au mode LPCM 2.0. -->
+  <!-- Le programme n'utilise aucune API audio et n'annonce donc aucun mode multicanal. -->
+  <value name="SOUND_FORMAT" type="integer">1</value>
+
+  <!-- Titre lisible du jeu. Des clés TITLE_00, TITLE_01, etc. peuvent fournir des traductions. -->
+  <value name="TITLE" type="string">Bonjour depuis Hexegesis</value>
+
+  <!-- Identifiant du titre. HXGS00001 est un identifiant synthétique de neuf caractères. -->
+  <value name="TITLE_ID" type="string">HXGS00001</value>
+
+  <!-- Version principale déclarée pour le contenu, distincte de APP_VER. -->
+  <value name="VERSION" type="string">01.00</value>
+</sfo>

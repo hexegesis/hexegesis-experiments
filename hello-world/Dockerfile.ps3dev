@@ -1,0 +1,61 @@
+# Cette image Debian est identifiée par le condensat de son index multiarchitecture.
+# Docker choisit automatiquement la variante correspondant à l'architecture du moteur.
+FROM debian:13-slim@sha256:d7e12182ce18b85b93007c1dedf31f2d29e01ccf3182cc4017c709b6259bc132
+
+# Ces révisions rendent la construction reproductible et évitent de dépendre
+# implicitement de l'état courant des dépôts ps3dev.
+ARG PS3TOOLCHAIN_COMMIT=e98d2ed5a5f58273ffce17d860f02af8f19eb9d9
+ARG PSL1GHT_COMMIT=f649a08fd536a9e27c08c7db2d93a2d7ee4c3bbe
+ARG PSL1GHT_SHA256=37683747db6bbae9715f80bc43bc477b86dd08da2e580807850e0415c500aa2e
+ARG PS3LIBRARIES_COMMIT=93c0200bb96ff571f80918a247e16a8a93e5e8ff
+ARG PS3LIBRARIES_SHA256=4844af74e21f21311c31f936118905c99a089b8356836853ace7b8fb143bad55
+
+# ps3toolchain et PSL1GHT installent leurs compilateurs, en-têtes, bibliothèques
+# et utilitaires sous le même préfixe.
+ENV PS3DEV=/usr/local/ps3dev
+ENV PSL1GHT=/usr/local/ps3dev
+ENV PATH="${PATH}:/usr/local/ps3dev/bin:/usr/local/ps3dev/ppu/bin:/usr/local/ps3dev/spu/bin"
+
+# Les paquets de compilation sont requis par ps3toolchain. xorriso construit
+# l'image ISO 9660 et xxd permet d'en contrôler les champs binaires.
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        autoconf \
+        automake \
+        bison \
+        build-essential \
+        ca-certificates \
+        flex \
+        git \
+        libelf-dev \
+        libgmp3-dev \
+        libncurses5-dev \
+        libssl-dev \
+        libtool-bin \
+        pkg-config \
+        python-dev-is-python3 \
+        texinfo \
+        wget \
+        xorriso \
+        xxd \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# ps3toolchain télécharge normalement les branches courantes de PSL1GHT et de
+# ps3libraries. Les deux substitutions imposent ici les archives et les
+# condensats déclarés plus haut avant de lancer la construction complète.
+RUN git init /tmp/ps3toolchain \
+    && cd /tmp/ps3toolchain \
+    && git remote add origin https://github.com/ps3dev/ps3toolchain.git \
+    && git fetch --depth 1 origin "${PS3TOOLCHAIN_COMMIT}" \
+    && git checkout --detach FETCH_HEAD \
+    && sed -i \
+        -e "s#^-.*ps3dev/psl1ght/tarball/master.*#${PSL1GHT_SHA256} 1999328 https://github.com/ps3dev/psl1ght/archive/${PSL1GHT_COMMIT}.tar.gz -> psl1ght.tar.gz#" \
+        -e "s#^-.*ps3dev/ps3libraries/tarball/master.*#${PS3LIBRARIES_SHA256} 46237 https://github.com/ps3dev/ps3libraries/archive/${PS3LIBRARIES_COMMIT}.tar.gz -> ps3libraries.tar.gz#" \
+        archives/archives.txt \
+    && ./toolchain.sh \
+    && rm -rf /tmp/ps3toolchain
+
+# Les commandes interactives et les montages de volume utilisent ce répertoire
+# lorsque aucun autre répertoire de travail n'est fourni à docker run.
+WORKDIR /build

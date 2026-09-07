@@ -1,0 +1,6 @@
+/build/
+/disc-root/
+/source/*.o
+/*.elf
+/*.self
+/*.iso
