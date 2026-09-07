@@ -19,6 +19,17 @@ Le script construit l'image de développement PS3, compile `source/main.c`, cré
 
 Les fichiers produits sont ignorés par Git et peuvent être recréés à tout moment.
 
+## Publication avec GitHub Actions
+
+Un tag dont le nom suit la forme `hello-world-v*` construit cette même ISO avec GitHub Actions et la joint à la GitHub Release correspondante. Le workflow appelle uniquement `./scripts/build.sh` : la procédure locale, la procédure de CI et les contrôles de structure décrits plus haut restent donc identiques.
+
+```sh
+git tag hello-world-v0.1.0
+git push origin hello-world-v0.1.0
+```
+
+La release contient `hello-world.iso`. Elle identifie le commit étiqueté qui a produit cette image. La CI vérifie sa structure, mais ne démarre pas RPCS3 ; l’observation du message TTY reste une vérification manuelle décrite ci-dessous. Comme pour toute l’expérience, cette ISO synthétique vise RPCS3 et ne constitue ni une image commerciale ni un support destiné à une console PlayStation 3 physique.
+
 ## Arborescence produite
 
 ```text

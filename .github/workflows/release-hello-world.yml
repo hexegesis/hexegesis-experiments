@@ -1,0 +1,39 @@
+name: Publier l'ISO Hello World
+
+# Seuls les tags de cet exemple créent une release : les futures expériences du
+# dépôt ne déclenchent donc pas cette construction par erreur.
+on:
+  push:
+    tags:
+      - "hello-world-v*"
+
+# gh release create utilise le jeton éphémère fourni par GitHub Actions pour
+# créer la release et y joindre l'ISO.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le commit étiqueté
+        uses: actions/checkout@v4
+
+      # build.sh reste l'unique procédure de construction : la CI ne duplique
+      # ni la chaîne Docker, ni les vérifications de l'image ISO.
+      - name: Construire l'ISO
+        working-directory: hello-world
+        run: ./scripts/build.sh
+
+      # L'ISO est publiée directement dans la GitHub Release plutôt que comme
+      # artefact temporaire de CI. Le tag identifie donc le commit qui l'a
+      # construite et la release qui la distribue.
+      - name: Créer la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            hello-world/hello-world.iso \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
