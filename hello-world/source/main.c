@@ -10,6 +10,6 @@ int main(void)
     /* puts ajoute automatiquement un retour à la ligne après le message. */
     puts("Bonjour depuis Hexegesis.");
 
-    /* Un code nul indique au système que le programme s'est terminé normalement. */
+    /* Indique au système que le programme s'est terminé normalement. */
     return EXIT_SUCCESS;
 }
